@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 if ENV['COVERAGE']
   # Run Coverage report
   require 'simplecov'
@@ -11,9 +13,8 @@ if ENV['COVERAGE']
     add_filter '/spec/'
     add_filter '/lib/spree/api/testing_support/'
 
-    coverage_dir "#{ENV['COVERAGE_DIR']}/legacy_api_v2_"+ ENV.fetch('CIRCLE_NODE_INDEX', 0) if ENV['COVERAGE_DIR']
-    command_name "test_" + ENV.fetch('CIRCLE_NODE_INDEX', 0)
-
+    coverage_dir "#{ENV['COVERAGE_DIR']}/legacy_api_v2_" + ENV.fetch('CIRCLE_NODE_INDEX', 0) if ENV['COVERAGE_DIR']
+    command_name "test_#{ENV.fetch('CIRCLE_NODE_INDEX', 0)}"
   end
 end
 
@@ -21,7 +22,7 @@ end
 ENV['RAILS_ENV'] ||= 'test'
 
 begin
-  require File.expand_path('../dummy/config/environment', __FILE__)
+  require File.expand_path('dummy/config/environment', __dir__)
 rescue LoadError
   puts 'Could not load dummy application. Please ensure you have run `bundle exec rake test_app`'
   exit
@@ -36,7 +37,7 @@ require 'jsonapi/rspec'
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
-Dir[File.dirname(__FILE__) + '/support/**/*.rb'].each { |f| require f }
+Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
 
 require 'spree/testing_support/factories'
 require 'spree/testing_support/jobs'
@@ -46,12 +47,12 @@ require 'spree/testing_support/image_helpers'
 require 'spree/testing_support/next_instance_of'
 require 'spree/testing_support/rspec_retry_config'
 
-require 'spree/legacy_api_v2/testing_support/v2/base'
-require 'spree/legacy_api_v2/testing_support/v2/current_order'
-require 'spree/legacy_api_v2/testing_support/v2/platform_contexts'
-require 'spree/legacy_api_v2/testing_support/v2/serializers_params'
-require 'spree/legacy_api_v2/testing_support/serializers'
-require 'spree/legacy_api_v2/testing_support/factories'
+require 'spree_legacy_api_v2/testing_support/v2/base'
+require 'spree_legacy_api_v2/testing_support/v2/current_order'
+require 'spree_legacy_api_v2/testing_support/v2/platform_contexts'
+require 'spree_legacy_api_v2/testing_support/v2/serializers_params'
+require 'spree_legacy_api_v2/testing_support/serializers'
+require 'spree_legacy_api_v2/testing_support/factories'
 
 def json_response
   case body = JSON.parse(response.body)
@@ -63,9 +64,8 @@ def json_response
 end
 
 RSpec.configure do |config|
-  config.backtrace_exclusion_patterns = [/gems\/activesupport/, /gems\/actionpack/, /gems\/rspec/]
+  config.backtrace_exclusion_patterns = [%r{gems/activesupport}, %r{gems/actionpack}, %r{gems/rspec}]
   config.color = true
-  config.default_formatter = 'doc'
   config.fail_fast = ENV['FAIL_FAST'] || false
   config.infer_spec_type_from_file_location!
   config.raise_errors_for_deprecations!

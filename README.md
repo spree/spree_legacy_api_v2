@@ -1,10 +1,10 @@
 # Spree Legacy API v2
 
-> **⚠️ DEPRECATED**: This gem provides the legacy API v2 endpoints for Spree Commerce. It is deprecated and will be removed in a future version. Please migrate to **API v3**.
+> **⚠️ DEPRECATED**: This gem provides the legacy API v2 endpoints for Spree Commerce. We recommend using **API v3**.
 
 ## Overview
 
-This gem contains the legacy Storefront API v2 and Platform API v2 endpoints that were previously part of `spree_api`. These APIs are now deprecated in favor of the new API v3, which uses Alba serializers and provides a cleaner, more maintainable codebase.
+This gem contains the legacy Storefront API v2 and Platform API v2 endpoints that were previously part of `spree_api`. These APIs are now deprecated in favor of the new API v3, which is much simpler, faster and more secure.
 
 ## Installation
 
@@ -33,19 +33,14 @@ The new Store API v3 provides similar functionality with improved consistency:
 | `GET /api/v2/storefront/products` | `GET /api/v3/store/products` |
 | `GET /api/v2/storefront/cart` | `GET /api/v3/store/orders/:id` |
 | `POST /api/v2/storefront/cart/add_item` | `POST /api/v3/store/orders/:id/line_items` |
-| `GET /api/v2/storefront/account` | `GET /api/v3/store/customers/me` |
+| `GET /api/v2/storefront/account` | `GET /api/v3/store/customers` |
 
 ### Key Differences
 
 1. **Serialization**: API v3 uses Alba serializers (faster, simpler) instead of JSONAPI::Serializer
 2. **Response Format**: API v3 returns simple JSON objects instead of JSONAPI format
-3. **Authentication**: Both APIs support the same authentication mechanisms
+3. **Authentication**: API v3 requires publishable key authentication for Store API and uses JWT tokens for user authentication
 4. **TypeScript Types**: API v3 automatically generates TypeScript types via Typelizer
-
-## Deprecation Timeline
-
-- **Current**: API v2 is deprecated but fully functional
-- **Next Major Release**: API v2 will be removed
 
 ## License
 

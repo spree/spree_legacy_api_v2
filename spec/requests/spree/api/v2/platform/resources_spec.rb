@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'Platform API v2 Resources spec', type: :request do
@@ -52,7 +54,7 @@ describe 'Platform API v2 Resources spec', type: :request do
   end
 
   describe '#index' do
-    let(:params) { }
+    let(:params) {}
     let(:execute) { get '/api/v2/platform/addresses', headers: bearer_token, params: params }
     let!(:resources) { create_list(:address, 5) }
     let(:resources_count) { 5 }
@@ -260,8 +262,10 @@ describe 'Platform API v2 Resources spec', type: :request do
         expect(json_response['data']).to have_attribute(:city).with_value(resource_params[:city])
         expect(json_response['data']).to have_attribute(:phone).with_value(resource_params[:phone])
         expect(json_response['data']).to have_attribute(:zipcode).with_value(resource_params[:zipcode])
-        expect(json_response['data']).to have_relationship(:state).with_data({ 'id' => state.id.to_s, 'type' => 'state' })
-        expect(json_response['data']).to have_relationship(:country).with_data({ 'id' => country.id.to_s, 'type' => 'country' })
+        expect(json_response['data']).to have_relationship(:state).with_data({ 'id' => state.id.to_s,
+                                                                               'type' => 'state' })
+        expect(json_response['data']).to have_relationship(:country).with_data({ 'id' => country.id.to_s,
+                                                                                 'type' => 'country' })
         expect(json_response['data']).to have_relationship(:user).with_data({ 'id' => user.id.to_s, 'type' => 'user' })
       end
 
@@ -313,7 +317,9 @@ describe 'Platform API v2 Resources spec', type: :request do
     context '#ensure_current_store' do
       context 'single store resource' do
         let(:execute) { post '/api/v2/platform/taxonomies', params: taxonomy_resource_params, headers: bearer_token }
-        let(:taxonomy_resource_params) { { taxonomy: build(:taxonomy, name: 'Ensure-TaxonomyTest', store: nil).attributes.symbolize_keys } }
+        let(:taxonomy_resource_params) do
+          { taxonomy: build(:taxonomy, name: 'Ensure-TaxonomyTest', store: nil).attributes.symbolize_keys }
+        end
 
         before { execute }
 
@@ -326,7 +332,9 @@ describe 'Platform API v2 Resources spec', type: :request do
       end
 
       context 'multi store resource empty array passed' do
-        let(:execute) { post '/api/v2/platform/payment_methods', params: payment_method_resource_params, headers: bearer_token }
+        let(:execute) do
+          post '/api/v2/platform/payment_methods', params: payment_method_resource_params, headers: bearer_token
+        end
         let(:payment_method_resource_params) do
           {
             payment_method: {
@@ -347,7 +355,9 @@ describe 'Platform API v2 Resources spec', type: :request do
       end
 
       context 'multi store resource array of stores ids passed' do
-        let(:execute) { post '/api/v2/platform/payment_methods', params: payment_method_resource_params, headers: bearer_token }
+        let(:execute) do
+          post '/api/v2/platform/payment_methods', params: payment_method_resource_params, headers: bearer_token
+        end
         let(:payment_method_resource_params) do
           {
             payment_method: {
@@ -400,7 +410,8 @@ describe 'Platform API v2 Resources spec', type: :request do
         expect(json_response['data']).to have_attribute(:phone).with_value(resource_params[:phone])
         expect(json_response['data']).to have_attribute(:zipcode).with_value(resource_params[:zipcode])
 
-        expect(json_response['data']).to have_relationship(:state).with_data({ 'id' => another_state.id.to_s, 'type' => 'state' })
+        expect(json_response['data']).to have_relationship(:state).with_data({ 'id' => another_state.id.to_s,
+                                                                               'type' => 'state' })
       end
     end
 
@@ -469,7 +480,10 @@ describe 'Platform API v2 Resources spec', type: :request do
       context 'multiple store resource' do
         context 'when an empty array is passed to a resource that can belong to many stores' do
           let!(:payment_method) { create(:payment_method, stores: [store, store_three, store_two]) }
-          let(:execute_payment_method) { patch "/api/v2/platform/payment_methods/#{payment_method.id}", params: payment_method_params, headers: bearer_token }
+          let(:execute_payment_method) do
+            patch "/api/v2/platform/payment_methods/#{payment_method.id}", params: payment_method_params,
+                                                                           headers: bearer_token
+          end
           let(:payment_method_params) do
             {
               payment_method: {
@@ -492,7 +506,10 @@ describe 'Platform API v2 Resources spec', type: :request do
 
         context 'when an array of store ids are passed to a resource that can belong to many stores' do
           let!(:payment_method) { create(:payment_method, stores: [store]) }
-          let(:execute_payment_method) { patch "/api/v2/platform/payment_methods/#{payment_method.id}", params: payment_method_params, headers: bearer_token }
+          let(:execute_payment_method) do
+            patch "/api/v2/platform/payment_methods/#{payment_method.id}", params: payment_method_params,
+                                                                           headers: bearer_token
+          end
           let(:payment_method_params) do
             {
               payment_method: {

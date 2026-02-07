@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe Spree::Api::V2::Platform::RefundSerializer do
@@ -5,7 +7,7 @@ describe Spree::Api::V2::Platform::RefundSerializer do
 
   subject { described_class.new(resource, params: serializer_params).serializable_hash }
 
-  let(:resource) { create(:refund, amount: 5.0, refunder: create(:user)) }
+  let(:resource) { create(:refund, amount: 5.0, refunder: create(:admin_user)) }
 
   it_behaves_like 'an ActiveJob serializable hash'
 

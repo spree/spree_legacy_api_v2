@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'Platform API v2 Digitals spec', type: :request do
@@ -10,7 +12,7 @@ describe 'Platform API v2 Digitals spec', type: :request do
   let(:bearer_token) { { 'Authorization' => valid_authorization } }
   let(:params) { { digital: { variant_id: variant.id.to_s, attachment: file_upload } } }
   let(:variant) { create(:variant) }
-  let(:file_upload) { fixture_file_upload(file_fixture('icon_256x256.jpg'), 'image/jpg') }
+  let(:file_upload) { fixture_file_upload(file_fixture('icon_256x256.png'), 'image/png') }
 
   context 'valid request' do
     it 'returns status created' do
