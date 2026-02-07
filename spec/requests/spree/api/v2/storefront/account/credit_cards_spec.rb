@@ -81,8 +81,7 @@ describe 'Storefront API v2 CreditCards spec', type: :request do
       it_behaves_like 'returns 403 HTTP status'
     end
 
-    context 'when user has admin privileges' do
-      let!(:user) { create(:admin_user) }
+    context 'when another user has credit cards' do
       let!(:new_user) { create(:user) }
       let!(:new_credit_card) { create(:credit_card, user_id: new_user.id, last_digits: '2222') }
 

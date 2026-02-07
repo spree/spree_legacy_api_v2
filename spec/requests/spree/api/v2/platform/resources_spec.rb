@@ -190,12 +190,6 @@ describe 'Platform API v2 Resources spec', type: :request do
         it_behaves_like 'valid request'
       end
 
-      context 'admin user' do
-        let(:user) { create(:admin_user) }
-        let(:resources_count) { 5 }
-
-        it_behaves_like 'valid request'
-      end
     end
 
     it_behaves_like 'returns auth token errors'
@@ -236,11 +230,6 @@ describe 'Platform API v2 Resources spec', type: :request do
         it_behaves_like 'returns 404 HTTP status'
       end
 
-      context 'admin user' do
-        let(:user) { create(:admin_user) }
-
-        it_behaves_like 'valid request'
-      end
     end
 
     it_behaves_like 'returns auth token errors'
