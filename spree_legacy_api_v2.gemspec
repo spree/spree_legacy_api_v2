@@ -16,10 +16,10 @@ Gem::Specification.new do |s|
   s.licenses      = ['AGPL-3.0-or-later', 'BSD-3-Clause']
 
   s.metadata = {
-    'bug_tracker_uri' => 'https://github.com/spree/spree/issues',
-    'changelog_uri' => "https://github.com/spree/spree/releases/tag/v#{s.version}",
+    'bug_tracker_uri' => 'https://github.com/spree/spree_legacy_api_v2/issues',
+    'changelog_uri' => "https://github.com/spree/spree_legacy_api_v2/releases/tag/v#{s.version}",
     'documentation_uri' => 'https://docs.spreecommerce.org/',
-    'source_code_uri' => "https://github.com/spree/spree/tree/v#{s.version}"
+    'source_code_uri' => "https://github.com/spree/spree_legacy_api_v2/tree/v#{s.version}"
   }
 
   s.required_ruby_version = '>= 3.2'
