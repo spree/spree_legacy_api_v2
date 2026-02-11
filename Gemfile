@@ -68,6 +68,6 @@ group :development do
   gem 'solargraph'
 end
 
-gem 'spree', github: 'spree/spree'
+gem 'spree', github: 'spree/spree', glob: 'backend/engines/**/*.gemspec'
 
 gemspec
