@@ -36,5 +36,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'jsonapi-serializer', '~> 2.1'
   s.add_dependency 'pagy', '~> 43.0'
 
-  s.add_dependency 'spree', '>= 5.4.0.alpha'
+  s.add_dependency 'spree', '>= 5.4.0.beta8'
+  s.add_dependency 'spree_posts'
+  s.add_dependency 'spree_legacy_product_properties'
 end

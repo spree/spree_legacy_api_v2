@@ -54,6 +54,9 @@ require 'spree_legacy_api_v2/testing_support/v2/serializers_params'
 require 'spree_legacy_api_v2/testing_support/serializers'
 require 'spree_legacy_api_v2/testing_support/factories'
 
+require 'spree_posts/factories'
+require 'spree_legacy_product_properties/factories'
+
 def json_response
   case body = JSON.parse(response.body)
   when Hash

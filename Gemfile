@@ -68,6 +68,12 @@ group :development do
   gem 'solargraph'
 end
 
-gem 'spree', github: 'spree/spree', glob: 'backend/engines/**/*.gemspec'
+gem 'spree', github: 'spree/spree', glob: 'spree/**/*.gemspec'
+gem 'spree_admin', github: 'spree/spree', glob: 'spree/**/*.gemspec'
+gem 'spree_dev_tools', '>= 0.6.0.rc1'
+gem 'spree_legacy_product_properties', github: 'spree/spree_legacy_product_properties'
+gem 'spree_posts', github: 'spree/spree-posts'
+
+gem 'propshaft' # needed for admin
 
 gemspec

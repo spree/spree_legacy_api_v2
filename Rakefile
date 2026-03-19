@@ -20,4 +20,7 @@ desc 'Generates a dummy app for testing'
 task :test_app do
   ENV['LIB_NAME'] = 'spree_legacy_api_v2'
   Rake::Task['extension:test_app'].invoke
+
+  system({ 'BUNDLE_GEMFILE' => File.expand_path('Gemfile', __dir__) }, 'rails g spree_posts:install')
+  system({ 'BUNDLE_GEMFILE' => File.expand_path('Gemfile', __dir__) }, 'rails g spree_legacy_product_properties:install')
 end
