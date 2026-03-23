@@ -49,8 +49,8 @@ describe 'Taxons Spec', type: :request do
         name = taxonomy_localized.name
 
         Mobility.with_locale(:pl) do
-          taxonomy_localized.update!(name: "Localized Taxonomy PL")
-          taxonomy_root_localized.update!(name: "Localized Taxonomy PL", pretty_name: "Localized Taxonomy PL")
+          taxonomy_localized.update!(name: 'Localized Taxonomy PL')
+          taxonomy_root_localized.update!(name: 'Localized Taxonomy PL', pretty_name: 'Localized Taxonomy PL')
         end
 
         taxonomy_localized
@@ -72,16 +72,16 @@ describe 'Taxons Spec', type: :request do
       xit 'returns all taxons' do
         expect(json_response['data'].size).to eq(3)
 
-        expect(json_response['data']).to include(have_type('taxon').and(have_attribute(:name).with_value("Localized Taxonomy PL")))
-        expect(json_response['data']).to include(have_type('taxon').and(have_attribute(:pretty_name).with_value("Localized Taxonomy PL")))
+        expect(json_response['data']).to include(have_type('taxon').and(have_attribute(:name).with_value('Localized Taxonomy PL')))
+        expect(json_response['data']).to include(have_type('taxon').and(have_attribute(:pretty_name).with_value('Localized Taxonomy PL')))
         expect(json_response['data']).to include(have_type('taxon').and(have_attribute(:permalink).with_value('localized-taxonomy-pl')))
 
-        expect(json_response['data']).to include(have_type('taxon').and(have_attribute(:name).with_value("Localized Taxon 1 PL")))
-        expect(json_response['data']).to include(have_type('taxon').and(have_attribute(:pretty_name).with_value("Localized Taxonomy PL -> Localized Taxon 1 PL")))
+        expect(json_response['data']).to include(have_type('taxon').and(have_attribute(:name).with_value('Localized Taxon 1 PL')))
+        expect(json_response['data']).to include(have_type('taxon').and(have_attribute(:pretty_name).with_value('Localized Taxonomy PL -> Localized Taxon 1 PL')))
         expect(json_response['data']).to include(have_type('taxon').and(have_attribute(:permalink).with_value('localized-taxonomy-pl/localized-taxon-1-pl')))
 
-        expect(json_response['data']).to include(have_type('taxon').and(have_attribute(:name).with_value("Localized Taxon 2 PL")))
-        expect(json_response['data']).to include(have_type('taxon').and(have_attribute(:pretty_name).with_value("Localized Taxonomy PL -> Localized Taxon 2 PL")))
+        expect(json_response['data']).to include(have_type('taxon').and(have_attribute(:name).with_value('Localized Taxon 2 PL')))
+        expect(json_response['data']).to include(have_type('taxon').and(have_attribute(:pretty_name).with_value('Localized Taxonomy PL -> Localized Taxon 2 PL')))
         expect(json_response['data']).to include(have_type('taxon').and(have_attribute(:permalink).with_value('localized-taxonomy-pl/localized-taxon-2-pl')))
       end
     end
@@ -212,7 +212,7 @@ describe 'Taxons Spec', type: :request do
       let(:store2) { create(:store, default_locale: 'en', supported_locales: 'en,pl,es') }
       let(:taxonomy) { store2.taxonomies.find_by(name: 'Categories') }
       let!(:taxon_with_slug) { create(:taxon, taxonomy: taxonomy, permalink: 'test_slug_en') }
-      let!(:translations) { taxon_with_slug.translations.create([{ permalink: 'test_slug_pl', locale: 'pl' }, { permalink: 'test_slug_es', locale: 'es' } ])}
+      let!(:translations) { taxon_with_slug.translations.create([{ permalink: 'test_slug_pl', locale: 'pl' }, { permalink: 'test_slug_es', locale: 'es' }]) }
 
       let(:expected_slugs) do
         {
@@ -252,7 +252,7 @@ describe 'Taxons Spec', type: :request do
       let(:store2) { create(:store, default_locale: 'en', supported_locales: 'en,pl,es') }
       let(:taxonomy) { store2.taxonomies.find_by(name: 'Categories') }
       let!(:taxon_with_slug) { create(:taxon, taxonomy: taxonomy, permalink: default_locale_slug) }
-      let!(:translations) { taxon_with_slug.translations.create([ { name: 'test slug en', permalink: translated_slug, locale: 'es' } ]) }
+      let!(:translations) { taxon_with_slug.translations.create([{ name: 'test slug en', permalink: translated_slug, locale: 'es' }]) }
       let(:default_locale_slug) { 'test_slug_en' }
       let(:translated_slug) { 'test-slug-es' }
 
@@ -263,40 +263,6 @@ describe 'Taxons Spec', type: :request do
 
       it 'finds the taxon' do
         expect(json_response['data']['id']).to eq(taxon_with_slug.id.to_s)
-      end
-    end
-
-    context 'with taxon image data' do
-      shared_examples 'returns taxon image data' do
-        it 'returns taxon image data' do
-          expect(json_response['included'].count).to eq(1)
-          expect(json_response['included'].first['type']).to eq('taxon_image')
-        end
-      end
-
-      let!(:image) { create(:taxon_image, viewable: taxon) }
-      let(:image_json_data) { json_response['included'].first['attributes'] }
-
-      before { get "/api/v2/storefront/taxons/#{taxon.id}?include=image#{taxon_image_transformation_params}" }
-
-      context 'when no image transformation params are passed' do
-        let(:taxon_image_transformation_params) { '' }
-
-        it_behaves_like 'returns taxon image data'
-
-        it 'returns taxon image' do
-          expect(image_json_data['transformed_url']).to be_nil
-        end
-      end
-
-      context 'when taxon image json returned' do
-        let(:taxon_image_transformation_params) { '&taxon_image_transformation[size]=100x50&taxon_image_transformation[quality]=50' }
-
-        it_behaves_like 'returns taxon image data'
-
-        it 'returns taxon image' do
-          expect(image_json_data['transformed_url']).not_to be_nil
-        end
       end
     end
   end

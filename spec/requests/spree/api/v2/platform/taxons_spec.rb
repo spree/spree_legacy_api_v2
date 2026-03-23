@@ -4,7 +4,7 @@ describe 'Platform API v2 Taxons API' do
   include_context 'Platform API v2'
 
   let(:store) { @default_store }
-  let(:taxonomy) { store.taxonomies.find_by(name: Spree.t(:taxonomy_categories_name)) }
+  let(:taxonomy) { create(:taxonomy, store: store, name: Spree.t(:taxonomy_categories_name)) }
   let(:store_2) { create(:store) }
   let(:bearer_token) { { 'Authorization' => valid_authorization } }
 
@@ -41,41 +41,7 @@ describe 'Platform API v2 Taxons API' do
 
       it 'returns taxon' do
         expect(json_response['data']).to have_id(taxon.id.to_s)
-        expect(json_response['data']).to have_relationships(:taxonomy, :parent, :children, :image, :products)
-      end
-    end
-
-    context 'with taxon image data' do
-      shared_examples 'returns taxon image data' do
-        it 'returns taxon image data' do
-          expect(json_response['included'].count).to eq(1)
-          expect(json_response['included'].first['type']).to eq('taxon_image')
-        end
-      end
-
-      let!(:image) { create(:taxon_image, viewable: taxon) }
-      let(:image_json_data) { json_response['included'].first['attributes'] }
-
-      before { get "/api/v2/storefront/taxons/#{taxon.id}?include=image#{taxon_image_transformation_params}", headers: bearer_token }
-
-      context 'when no image transformation params are passed' do
-        let(:taxon_image_transformation_params) { '' }
-
-        it_behaves_like 'returns taxon image data'
-
-        it 'returns taxon image' do
-          expect(image_json_data['transformed_url']).to be_nil
-        end
-      end
-
-      context 'when taxon image json returned' do
-        let(:taxon_image_transformation_params) { '&taxon_image_transformation[size]=100x50&taxon_image_transformation[quality]=50' }
-
-        it_behaves_like 'returns taxon image data'
-
-        it 'returns taxon image' do
-          expect(image_json_data['transformed_url']).not_to be_nil
-        end
+        expect(json_response['data']).to have_relationships(:taxonomy, :parent, :children, :products)
       end
     end
   end

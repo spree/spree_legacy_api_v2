@@ -3,9 +3,7 @@ require 'spec_helper'
 describe Spree::Api::V2::Platform::TaxonImageSerializer do
   subject { described_class.new(image) }
 
-  let(:image) { create(:taxon_image) }
-
-  it { expect(subject.serializable_hash).to be_kind_of(Hash) }
+  it { expect(subject.serializable_hash).to be_a(Hash) }
 
   it do
     expect(subject.serializable_hash).to eq(

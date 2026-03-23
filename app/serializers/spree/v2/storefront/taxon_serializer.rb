@@ -43,12 +43,6 @@ module Spree
         has_many   :children, record_type: :taxon, serializer: Spree.api.storefront_taxon_serializer
         has_many   :products, record_type: :product, serializer: Spree.api.storefront_product_serializer,
                               if: proc { |_taxon, params| params && params[:include_products] == true }
-
-        has_one    :image,
-                   object_method_name: :icon,
-                   id_method_name: :icon_id,
-                   record_type: :taxon_image,
-                   serializer: Spree.api.storefront_taxon_image_serializer
       end
     end
   end

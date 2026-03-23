@@ -47,7 +47,6 @@ describe Spree::Api::V2::Platform::StoreSerializer do
             settings: store.settings,
             logo: url_helpers.cdn_image_url(logo.attachment),
             mailer_logo: nil,
-            favicon_path: nil,
             storefront_custom_code_body_end: nil,
             storefront_custom_code_body_start: nil,
             storefront_custom_code_head: nil

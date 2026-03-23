@@ -57,9 +57,6 @@ describe Spree::Api::V2::Platform::TaxonSerializer do
                   type: :taxonomy
                 }
               },
-              image: {
-                data: nil
-              },
               children: {
                 data: [
                   {
@@ -132,9 +129,6 @@ describe Spree::Api::V2::Platform::TaxonSerializer do
                   id: taxon.taxonomy.id.to_s,
                   type: :taxonomy
                 }
-              },
-              image: {
-                data: nil
               },
               products: {
                 data: [

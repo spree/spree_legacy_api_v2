@@ -32,16 +32,6 @@ describe 'Storefront API v2 Stores spec', type: :request do
         expect(json_response['data']).to have_relationship(:default_country)
         expect(json_response['data']).to have_relationship(:default_country).with_data('id' => store.default_country_id.to_s, 'type' => 'country')
       end
-
-      describe 'favicon_path attribute' do
-        context 'with favicon attached' do
-          let!(:store) { create(:store, :with_favicon) }
-
-          it 'returns store favicon path' do
-            expect(json_response.dig(:data, :attributes, :favicon_path)).to end_with('thinking-cat.jpg')
-          end
-        end
-      end
     end
 
     context 'with locale set to pl' do
@@ -89,7 +79,7 @@ describe 'Storefront API v2 Stores spec', type: :request do
 
     describe 'stores#current_store' do
       before do
-        get "/api/v2/storefront/store"
+        get '/api/v2/storefront/store'
       end
 
       it 'returns store with attributes' do
