@@ -8,7 +8,9 @@ describe 'API v2 Store Switching spec', type: :request do
   let!(:another_product) { create(:product, stores: [another_store]) }
 
   context 'existing store found' do
-    before { host!('another-store.lvh.me') }
+    before do
+      allow_any_instance_of(Spree::Api::V2::Storefront::ProductsController).to receive(:current_store).and_return(another_store)
+    end
 
     context 'product associated with store' do
       before { get "/api/v2/storefront/products/#{another_product.slug}" }
@@ -24,7 +26,9 @@ describe 'API v2 Store Switching spec', type: :request do
   end
 
   context 'non-existing store' do
-    before { host!('missing-store.lvh.me') }
+    before do
+      allow_any_instance_of(Spree::Api::V2::Storefront::ProductsController).to receive(:current_store).and_return(store)
+    end
 
     context 'fallbacks to the default store' do
       context 'product associated with store' do

@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'Taxons Spec', type: :request do
   let!(:store) { @default_store }
-  let!(:taxonomy) { store.taxonomies.first }
+  let!(:taxonomy) { store.taxonomies.first || create(:taxonomy, store: store) }
   let!(:taxons) { create_list(:taxon, 2, taxonomy: taxonomy, parent: taxonomy.root) }
 
   before do
@@ -18,7 +18,7 @@ describe 'Taxons Spec', type: :request do
       expect(response.status).to eq(200)
 
       expect(json_response['data']).to have_type('taxon')
-      expect(json_response['data']).to have_relationships(:parent, :taxonomy, :children, :products, :image)
+      expect(json_response['data']).to have_relationships(:parent, :taxonomy, :children, :products)
     end
   end
 
@@ -29,7 +29,7 @@ describe 'Taxons Spec', type: :request do
       it 'returns all taxons' do
         expect(json_response['data'].size).to eq(store.taxons.count)
         expect(json_response['data'][0]).to have_type('taxon')
-        expect(json_response['data'][0]).to have_relationships(:parent, :taxonomy, :children, :image)
+        expect(json_response['data'][0]).to have_relationships(:parent, :taxonomy, :children)
         expect(json_response['data'][0]).not_to have_relationships(:produts)
       end
     end
@@ -94,7 +94,7 @@ describe 'Taxons Spec', type: :request do
         expect(json_response['data'][0]).to have_type('taxon')
         expect(json_response['data'][0]).to have_id(store.taxonomies.first.root.id.to_s)
         expect(json_response['data'][0]).to have_relationship(:parent).with_data(nil)
-        expect(json_response['data'][0]).to have_relationships(:parent, :taxonomy, :children, :image)
+        expect(json_response['data'][0]).to have_relationships(:parent, :taxonomy, :children)
       end
     end
 
@@ -210,7 +210,7 @@ describe 'Taxons Spec', type: :request do
 
     context 'with localized_slugs' do
       let(:store2) { create(:store, default_locale: 'en', supported_locales: 'en,pl,es') }
-      let(:taxonomy) { store2.taxonomies.find_by(name: 'Categories') }
+      let(:taxonomy) { store2.taxonomies.first || create(:taxonomy, name: 'Categories', store: store2) }
       let!(:taxon_with_slug) { create(:taxon, taxonomy: taxonomy, permalink: 'test_slug_en') }
       let!(:translations) { taxon_with_slug.translations.create([{ permalink: 'test_slug_pl', locale: 'pl' }, { permalink: 'test_slug_es', locale: 'es' }]) }
 
@@ -234,7 +234,7 @@ describe 'Taxons Spec', type: :request do
 
     context 'with fallback to default locale' do
       let(:store2) { create(:store, default_locale: 'en', supported_locales: 'en,pl,es') }
-      let(:taxonomy) { store2.taxonomies.find_by(name: 'Categories') }
+      let(:taxonomy) { store2.taxonomies.first || create(:taxonomy, name: 'Categories', store: store2) }
       let!(:taxon_with_slug) { create(:taxon, taxonomy: taxonomy, name: 'test slug en', permalink: default_locale_slug) }
       let(:default_locale_slug) { 'test-slug-en' }
 
@@ -250,7 +250,7 @@ describe 'Taxons Spec', type: :request do
 
     context 'with slug in translated locale' do
       let(:store2) { create(:store, default_locale: 'en', supported_locales: 'en,pl,es') }
-      let(:taxonomy) { store2.taxonomies.find_by(name: 'Categories') }
+      let(:taxonomy) { store2.taxonomies.first || create(:taxonomy, name: 'Categories', store: store2) }
       let!(:taxon_with_slug) { create(:taxon, taxonomy: taxonomy, permalink: default_locale_slug) }
       let!(:translations) { taxon_with_slug.translations.create([{ name: 'test slug en', permalink: translated_slug, locale: 'es' }]) }
       let(:default_locale_slug) { 'test_slug_en' }

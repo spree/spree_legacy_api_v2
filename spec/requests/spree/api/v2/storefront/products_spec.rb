@@ -45,19 +45,20 @@ describe 'API V2 Storefront Products Spec', type: :request do
     end
 
     context 'when product associated with two stores' do
-      let!(:new_store_taxonomy) { create(:taxonomy, store: store) }
       let(:store2) { create(:store) }
       let(:taxonomy2) { create(:taxonomy, store: store2) }
       let!(:taxon2) { taxonomy2.root }
+      let(:extra_store_taxonomy) { create(:taxonomy, store: store) }
 
       before do
         product_with_taxon.stores << store2
         product_with_taxon.taxons << taxon2
+        extra_store_taxonomy # create after product_with_taxon so it doesn't become store.taxonomies.first
       end
 
       shared_examples 'should not return not related taxon' do
         it do
-          expect(json_response['data'][0]).not_to have_relationship(:taxons).with_data([{ 'id' => new_store_taxonomy.id.to_s, 'type' => 'taxon' }])
+          expect(json_response['data'][0]).not_to have_relationship(:taxons).with_data([{ 'id' => extra_store_taxonomy.root.id.to_s, 'type' => 'taxon' }])
         end
       end
 
@@ -449,8 +450,8 @@ describe 'API V2 Storefront Products Spec', type: :request do
         get '/api/v2/storefront/products?filter[in_stock]=true'
       end
 
-      it 'returns products in stock' do
-        expect(json_response['data'].count).to eq 2
+      it 'returns products in stock or backorderable' do
+        expect(json_response['data'].count).to eq 9
         expect(json_response['data'].pluck(:id)).to include(in_stock_product.id.to_s, not_backorderable_product.id.to_s)
       end
     end

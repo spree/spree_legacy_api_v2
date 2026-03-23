@@ -30,14 +30,13 @@ module Spree
           end
 
           def scope_includes
-            node_includes = %i[icon parent taxonomy translations]
+            node_includes = %i[parent taxonomy]
 
             {
               parent: node_includes,
               children: node_includes,
               taxonomy: [root: node_includes],
-              icon: [attachment_attachment: :blob],
-              translations: []
+              image_attachment: :blob
             }
           end
 

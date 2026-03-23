@@ -71,9 +71,6 @@ describe Spree::V2::Storefront::TaxonSerializer do
                   }
                 ]
               },
-              image: {
-                data: nil
-              },
               metafields: {
                 data: [
                   {
@@ -158,9 +155,6 @@ describe Spree::V2::Storefront::TaxonSerializer do
                     type: :product
                   }
                 ]
-              },
-              image: {
-                data: nil
               },
               metafields: {
                 data: [

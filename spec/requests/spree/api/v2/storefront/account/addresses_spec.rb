@@ -71,11 +71,10 @@ describe 'Storefront API v2 Addresses spec', type: :request do
 
     context 'when address from countries that are supported in the current store' do
       let(:country) { create(:country, name: 'France') }
-      let(:zone) { create(:zone, name: 'EU_VAT', countries: [country], kind: 'country') }
+      let!(:market) { create(:market, store: store, countries: [country]) }
       let!(:eu_address) { create(:address, user_id: user.id, country: country) }
 
       before do
-        store.update(checkout_zone: zone)
         get '/api/v2/storefront/account/addresses', headers: headers_bearer
       end
 
@@ -88,12 +87,11 @@ describe 'Storefront API v2 Addresses spec', type: :request do
 
     context 'when address from countries that are not supported in the current store' do
       let(:eu_country) { create(:country, name: 'France') }
-      let(:zone) { create(:zone, name: 'EU_VAT', countries: [eu_country], kind: 'country') }
+      let!(:market) { create(:market, store: store, countries: [eu_country]) }
       let(:country) { create(:country) }
       let!(:us_address) { create(:address, user_id: user.id, country: country) }
 
       before do
-        store.update(checkout_zone: zone)
         get '/api/v2/storefront/account/addresses', headers: headers_bearer
       end
 

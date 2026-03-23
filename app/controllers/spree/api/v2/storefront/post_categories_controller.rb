@@ -25,6 +25,10 @@ module Spree
             Spree::PostCategory
           end
 
+          def scope
+            model_class.for_store(current_store)
+          end
+
           def serializer_params
             super.merge(include_posts: action_name == 'show')
           end

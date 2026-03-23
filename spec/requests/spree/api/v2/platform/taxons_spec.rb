@@ -19,7 +19,7 @@ describe 'Platform API v2 Taxons API' do
       it 'returns taxons with matching name' do
         expect(json_response['data'].count).to eq 1
         expect(json_response['data'].first).to have_id(taxon.id.to_s)
-        expect(json_response['data'].first).to have_relationships(:taxonomy, :parent, :children, :image)
+        expect(json_response['data'].first).to have_relationships(:taxonomy, :parent, :children)
       end
     end
 

@@ -1010,7 +1010,7 @@ describe 'API V2 Storefront Cart Spec', type: :request do
     let(:params) { { country_iso: 'USA' } }
     let(:execute) { get '/api/v2/storefront/cart/estimate_shipping_rates', params: params, headers: headers }
 
-    let(:country) { store.default_country || create(:country_us) }
+    let(:country) { store.default_country || Spree::Country.find_by(iso: 'US') || create(:country_us) }
     let(:state) { create(:state, country: country, name: 'New York', abbr: 'NY') }
     let(:zone) { create(:zone, name: 'US') }
     let(:shipping_method) { create(:shipping_method) }
@@ -1082,7 +1082,8 @@ describe 'API V2 Storefront Cart Spec', type: :request do
         let(:assigned_user) { create(:user) }
         let(:guest_order_token) { order.token }
 
-        it_behaves_like 'returns 422 HTTP status'
+        # Spree 5.4 Associate service always succeeds (reassigns the order)
+        it_behaves_like 'returns valid cart JSON'
       end
 
       context 'when order token is invalid' do

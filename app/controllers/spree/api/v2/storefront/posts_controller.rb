@@ -6,23 +6,31 @@ module Spree
           protected
 
           def sorted_collection
-            collection_sorter.new(collection, params, allowed_sort_attributes).call
+            sorter = Spree.api.storefront_posts_sorter
+            if sorter
+              sorter.new(collection, params, allowed_sort_attributes).call
+            else
+              super
+            end
           end
 
           def collection
-            @collection ||= collection_finder.new(scope: scope, params: finder_params).execute
+            @collection ||= begin
+              finder = Spree.api.storefront_posts_finder
+              if finder
+                finder.new(scope: scope, params: finder_params).execute
+              else
+                result = scope
+                result = result.search_by_title(params[:q]) if params[:q].present?
+                result = result.where(post_category_id: params.dig(:filter, :category_ids).split(',')) if params.dig(:filter, :category_ids).present?
+                result = result.tagged_with(params.dig(:filter, :tags).split(','), any: true) if params.dig(:filter, :tags).present?
+                result
+              end
+            end
           end
 
           def resource
             @resource ||= find_with_fallback_default_locale { scope.friendly.find(params[:id]) } || scope.friendly.find(params[:id])
-          end
-
-          def collection_finder
-            Spree.api.storefront_posts_finder
-          end
-
-          def collection_sorter
-            Spree.api.storefront_posts_sorter
           end
 
           def collection_serializer
@@ -38,7 +46,7 @@ module Spree
           end
 
           def scope
-            super.published.includes(:post_category, image_attachment: :blob)
+            model_class.for_store(current_store).published.includes(:post_category, image_attachment: :blob)
           end
 
           def allowed_sort_attributes

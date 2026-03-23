@@ -26,7 +26,10 @@ describe Spree::Api::V2::Platform::AssetSerializer do
           created_at: resource.created_at,
           updated_at: resource.updated_at,
           public_metadata: resource.public_metadata,
-          private_metadata: resource.private_metadata
+          private_metadata: resource.private_metadata,
+          focal_point_x: resource.focal_point_x,
+          focal_point_y: resource.focal_point_y,
+          media_type: resource.media_type
         },
         relationships: {
           viewable: {

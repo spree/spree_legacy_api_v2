@@ -6,7 +6,7 @@ describe Spree::Api::V2::Platform::ProductSerializer do
   subject { described_class.new(product, params: serializer_params).serializable_hash }
 
   let(:store) { @default_store }
-  let(:taxonomy) { store.taxonomies.first }
+  let(:taxonomy) { store.taxonomies.first || create(:taxonomy, store: store) }
   let!(:images) { create_list(:image, 2) }
   let(:product) do
     create(
@@ -51,7 +51,7 @@ describe Spree::Api::V2::Platform::ProductSerializer do
           display_compare_at_price: '$15.00',
           variant_count: product.variant_count,
           classification_count: product.classification_count,
-          total_image_count: product.total_image_count,
+          media_count: product.media_count,
           public_metadata: {},
           private_metadata: {}
         },
